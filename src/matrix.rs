@@ -1,11 +1,11 @@
 pub struct Matrix<T> {
-  _cols: u32,
-  _rows: u32,
+  _cols: usize,
+  _rows: usize,
   _data: Vec<T>,
 }
 
 impl<T> Matrix<T> {
-    pub fn new(cols: u32, rows: u32) -> Matrix<T> {
+    pub fn new(cols: usize, rows: usize) -> Matrix<T> {
         Matrix {
             _cols: cols,
             _rows: rows,
@@ -13,13 +13,13 @@ impl<T> Matrix<T> {
         }
     }
 
-    pub fn cols(&mut self) -> u32 { self._cols.clone() }
-    pub fn rows(&mut self) -> u32 { self._rows.clone() }
+    pub fn cols(&mut self) -> usize { self._cols.clone() }
+    pub fn rows(&mut self) -> usize { self._rows.clone() }
 
-    pub fn get(&mut self, i: u32, j: u32) -> T {
+    pub fn get(&mut self, i: usize, j: usize) -> T {
         self._data[(i+j*self.cols()) as usize]
     }
-    pub fn set(&mut self, i: u32, j: u32, d: T) {
+    pub fn set(&mut self, i: usize, j: usize, d: T) {
         self._data[(i+j*self.cols()) as usize] = d;
     }
 

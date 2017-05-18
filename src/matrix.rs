@@ -23,7 +23,7 @@ impl<T> Matrix<T> {
         self._data[(i+j*self.cols()) as usize] = d;
     }
 
-    pub fn fill_with(&mut self, v: T) -> &mut Matrix<T> {
+    pub fn fill_with(&mut self, v: <T>) -> &mut Matrix<T> {
         self._data = vec![v; (self.cols()*self.rows()) as usize];
         self
     }

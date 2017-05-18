@@ -24,7 +24,7 @@ impl<T> Matrix<T> {
     }
 
     pub fn fill_with(&mut self, v: T) -> &mut Matrix<T> {
-        self._data = vec![v, (self.cols()*self.rows()) as T];
+        self._data = vec![v; (self.cols()*self.rows()) as usize];
         self
     }
     pub fn identity(&mut self) -> &mut Matrix<T> {
@@ -32,7 +32,7 @@ impl<T> Matrix<T> {
             panic!("Matrix is not square. Bye");
         }
 
-        self.fill(0);
+        self.fill_with(0);
         //self._data = vec![0 as f64, (self.cols()*self.rows()) as f64];
 
         for i in 0..self.cols() {

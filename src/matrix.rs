@@ -13,10 +13,10 @@ impl<T> Matrix<T> {
         }
     }
 
-    pub fn cols(&mut self) -> usize { self._cols.clone() }
-    pub fn rows(&mut self) -> usize { self._rows.clone() }
+    pub fn cols(&self) -> usize { self._cols.clone() }
+    pub fn rows(&self) -> usize { self._rows.clone() }
 
-    pub fn get(&mut self, i: usize, j: usize) -> T {
+    pub fn get(&self, i: usize, j: usize) -> T {
         &mut self._data[(i+j*self.cols()) as usize]
     }
     pub fn set(&mut self, i: usize, j: usize, d: <T>) {

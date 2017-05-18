@@ -25,6 +25,7 @@ impl<T> Matrix<T> {
 
     pub fn fill_with(&mut self, v: T) -> &mut Matrix<T> {
         self._data = vec![v, (self.cols()*self.rows()) as T];
+        self
     }
     pub fn identity(&mut self) -> &mut Matrix<T> {
         if self.rows() != self.cols() {
@@ -73,8 +74,8 @@ mod tests {
 
     #[test]
     fn zero_1x1() {
-        let mut m = Matrix::<f64>::new(1,1).fill_with(0);
+        let mut m = Matrix::<f64>::new(1,1).fill_with(0 as f64);
         assert_eq!(m.data.len(), 0);
-        assert_eq!(m.data[0], 0);
+        assert_eq!(m.data[0], 0 as f64);
     }
 }

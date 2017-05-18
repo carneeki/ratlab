@@ -19,7 +19,7 @@ impl<T> Matrix<T> {
     pub fn get(&mut self, i: usize, j: usize) -> T {
         &mut self._data[(i+j*self.cols()) as usize]
     }
-    pub fn set(&mut self, i: usize, j: usize, d: T) {
+    pub fn set(&mut self, i: usize, j: usize, d: <T>) {
         self._data[(i+j*self.cols()) as usize] = d;
     }
 

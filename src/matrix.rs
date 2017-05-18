@@ -17,7 +17,7 @@ impl<T> Matrix<T> {
     pub fn rows(&mut self) -> usize { self._rows.clone() }
 
     pub fn get(&mut self, i: usize, j: usize) -> T {
-        self._data[(i+j*self.cols()) as usize]
+        &mut self._data[(i+j*self.cols()) as usize]
     }
     pub fn set(&mut self, i: usize, j: usize, d: T) {
         self._data[(i+j*self.cols()) as usize] = d;
@@ -62,7 +62,7 @@ trait Squareness {
     fn is_square(&self) -> bool;
 }
 
-impl Squareness for Matrix<T> {
+impl<T> Squareness for Matrix<T> {
     fn is_square(&self) -> bool {
         self.cols() == self.rows()
     }
@@ -74,8 +74,8 @@ mod tests {
 
     #[test]
     fn zero_1x1() {
-        let mut m = Matrix::<f64>::new(1,1).fill_with(0 as f64);
+        let mut m = Matrix::new(1,1).fill_with(0);
         assert_eq!(m.data.len(), 0);
-        assert_eq!(m.data[0], 0 as f64);
+        assert_eq!(m.data[0], 0);
     }
 }

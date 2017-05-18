@@ -16,14 +16,14 @@ impl<T> Matrix<T> {
     pub fn cols(&mut self) -> u32 { self._cols.clone() }
     pub fn rows(&mut self) -> u32 { self._rows.clone() }
 
-    pub fn get<T>(&mut self, i: u32, j: u32) -> T {
+    pub fn get(&mut self, i: u32, j: u32) -> T {
         self._data[(i+j*self.cols()) as usize]
     }
-    pub fn set<T>(&mut self, i: u32, j: u32, d: T) {
+    pub fn set(&mut self, i: u32, j: u32, d: T) {
         self._data[(i+j*self.cols()) as usize] = d;
     }
 
-    pub fn fill<T>(&mut self, v: T) -> &mut Matrix<T> {
+    pub fn fill_with(&mut self, v: T) -> &mut Matrix<T> {
         self._data = vec![v, (self.cols()*self.rows()) as T];
     }
     pub fn identity(&mut self) -> &mut Matrix<T> {
@@ -73,7 +73,7 @@ mod tests {
 
     #[test]
     fn zero_1x1() {
-        let mut m = Matrix::<f64>::new(1,1).zeroes();
+        let mut m = Matrix::<f64>::new(1,1).fill_with(0);
         assert_eq!(m.data.len(), 0);
         assert_eq!(m.data[0], 0);
     }

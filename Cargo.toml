@@ -5,3 +5,4 @@ authors = ["Adam Carmichael <carneeki@carneeki.net>"]
 
 [dependencies]
 num = "0.1"
+num-traits = "0.1"

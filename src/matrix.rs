@@ -1,6 +1,5 @@
 use num_traits::Num;
-use std::ops::Index;
-use std::ops::IndexMut;
+use std::ops::{Index,IndexMut};
 
 #[derive(Debug)]
 struct Matrix<T> {

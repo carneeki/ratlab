@@ -66,39 +66,38 @@ impl<T: Num + Copy> MatrixBuilder<T> {
     }
 
     pub fn set_cols(&mut self, cols: usize) -> &mut Matrix<T> {
-        self._cols = cols;
-        self
+        (self.0)._cols = cols;
+        &mut self.0
     }
 
     pub fn set_rows(&mut self, rows: usize) -> &mut Matrix<T> {
-        self._rows = rows;
-        self
+        (self.0)._rows = rows;
+        &mut self.0
     }
 
     pub fn finalize(self) -> Matrix<T> { // takeownership and destroy self
-        if self._cols == num::zero() {
+        if (self.0)._cols == 0 {
             panic!("cols cannot be zero");
         }
-        if self._rows == zero() {
+        if (self.0)._rows == 0 {
             panic!("rows cannot be zero");
         }
 
         Matrix {
-            _cols: self.cols(),
-            _rows: self.rows(),
-            _data: self._data,
+            _cols: (self.0).cols(),
+            _rows: (self.0).rows(),
+            _data: (self.0)._data,
         }
     }
 }
 
-/*
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn zero_1x1() {
-        let mut m = Matrix::fill_with(1,1,0);
+        let mut m = MatrixBuilder::new().set_cols(1).set_rows(1).will_with(0).finalize();
 
         assert_eq!(m.cols()  , 1 as usize);
         assert_eq!(m.rows()  , 1 as usize);
@@ -113,7 +112,7 @@ mod tests {
 
     #[test]
     fn one_1x1() {
-        let mut m = Matrix::fill_with(1,1,1);
+        let mut m = Matrix::new().cols(1).rows(1).fill_with(1);
 
         assert_eq!(m.cols()  , 1 as usize);
         assert_eq!(m.rows()  , 1 as usize);
@@ -209,7 +208,7 @@ mod tests {
 
     #[test]
     fn identity_2x2() {
-        let mut m = Matrix::identity(2);
+        let mut m = Matrix::new().set_cols(2).set_rows(2).identity().finalize();
 
         assert_eq!(m.cols()  , 2 as usize);
         assert_eq!(m.rows()  , 2 as usize);
@@ -242,7 +241,8 @@ mod tests {
 
     #[test]
     fn zero_1x2() {
-        let mut m = Matrix::fill_with(1, 2, 0);
+        let mut m = Matrix::new().cols(2).rows(1).fill_with(0).finalize();
+
         assert_eq!(m.cols() , 1 as usize);
         assert_eq!(m.rows() , 2 as usize);
 
@@ -258,4 +258,3 @@ mod tests {
         assert_eq!(m.is_square(), false);
     }
 }
-*/

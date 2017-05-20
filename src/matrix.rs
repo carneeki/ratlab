@@ -10,7 +10,7 @@ impl<T: Num> Matrix<T> {
         Matrix {
             _cols: cols,
             _rows: rows,
-            data: Vec::new(),
+            data: Vec::<T>,
         }
     }
 

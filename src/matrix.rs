@@ -20,23 +20,26 @@ impl<T: Num + Copy> Matrix<T> {
     pub fn cols(&self) -> usize { self._cols }
     pub fn rows(&self) -> usize { self._rows }
 
-    pub fn fill_with(mut self, v: T) -> Matrix<T> {
-        self._data = vec![v; (self.cols()*self.rows()) as usize];
-        self
+    pub fn fill_with(cols: usize, rows: usize, v: T) -> Matrix<T> {
+        Matrix {
+            _cols: cols,
+            _rows: rows,
+            _data: vec![v; (cols * rows) as usize],
+        }
     }
 
-    pub fn identity(mut self) -> Matrix<T> {
-        if self.rows() != self.cols() {
-            panic!("Matrix is not square. Bye");
-        }
+    pub fn identity(dim: usize) -> Matrix<T> {
+        Matrix {
+            _cols: dim,
+            _rows: dim,
+            _data: vec![0; (dim * dim) as usize],
+        };
 
-        self.fill_with(T::zero());
         let mut addr = 0;
-        for i in 0 .. self.cols() {
-            addr = (i + i*self.cols()) as usize;
+        for i in 0 .. dim {
+            addr = (i + i * dim) as usize;
             self._data[addr] = T::one();
         }
-        self
     }
 }
 
@@ -68,7 +71,7 @@ mod tests {
 
     #[test]
     fn zero_1x1() {
-        let mut m = Matrix::new(1,1).fill_with(0);
+        let mut m = Matrix::fill_with(1,1,0);
 
         assert_eq!(m.cols()  , 1 as usize);
         assert_eq!(m.rows()  , 1 as usize);
@@ -81,7 +84,7 @@ mod tests {
 
     #[test]
     fn one_1x1() {
-        let mut m = Matrix::new(1,1).fill_with(1);
+        let mut m = Matrix::fill_with(1,1,1);
 
         assert_eq!(m.cols()  , 1 as usize);
         assert_eq!(m.rows()  , 1 as usize);
@@ -94,7 +97,7 @@ mod tests {
 
     #[test]
     fn identity_1x1() {
-        let mut m = Matrix::new(1,1).identity();
+        let mut m = Matrix::identity(1);
 
         assert_eq!(m.cols()  , 1 as usize);
         assert_eq!(m.rows()  , 1 as usize);
@@ -107,7 +110,7 @@ mod tests {
 
     #[test]
     fn zero_2x2() {
-        let mut m = Matrix::new(2,2).fill_with(0);
+        let mut m = Matrix::fill_with(2,2,0);
 
         assert_eq!(m.cols()  , 2 as usize);
         assert_eq!(m.rows()  , 2 as usize);
@@ -138,7 +141,7 @@ mod tests {
 
     #[test]
     fn one_2x2() {
-        let mut m = Matrix::new(2,2).fill_with(1);
+        let mut m = Matrix::fill_with(2,2,1);
 
         assert_eq!(m.cols()  , 2 as usize);
         assert_eq!(m.rows()  , 2 as usize);
@@ -169,7 +172,7 @@ mod tests {
 
     #[test]
     fn identity_2x2() {
-        let mut m = Matrix::new(2,2).identity();
+        let mut m = Matrix::identity(2);
 
         assert_eq!(m.cols()  , 2 as usize);
         assert_eq!(m.rows()  , 2 as usize);

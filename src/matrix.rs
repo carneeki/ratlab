@@ -64,7 +64,7 @@ impl<T : Num + Copy> IndexMut<(usize,usize)> for Matrix<T> {
 }
 
 trait Squareness { fn is_square(&self) -> bool; }
-impl<T> Squareness for Matrix<T> {
+impl<T : Num + Copy> Squareness for Matrix<T> {
     fn is_square(&self) -> bool {
         self.cols() == self.rows()
     }
@@ -76,20 +76,28 @@ mod tests {
 
     #[test]
     fn zero_1x1() {
-        let m = Matrix::default()
-            .cols(3)
-            .rows(3)
+        let mut m = Matrix::new(1,1)
             .fill_with(0)
-            .build();
+            .finalize();
 
-        println!("{:?}", m);
+        assert_eq!(m.cols()  , 1 as usize);
+        assert_eq!(m.rows()  , 1 as usize);
+        assert_eq!(m[(0,0)]  , 0);
+        assert_eq!(m._data[0], 0);
+        m[(0,0)] = 1;
+        assert_eq!(m[(0,0)]  , 1);
+        assert_eq!(m._data[0], 1);
+    }
 
-        //assert_eq!(m.cols  , 3 as usize);
-        assert_eq!(m.cols(), 3 as usize);
-        //assert_eq!(m.rows  , 3 as usize);
-        assert_eq!(m.rows(), 3 as usize);
-        //assert_eq!(m.data.len(), 0);
-        //assert_eq!(m.data[0], 0);
+    fn one_1x1() {
+        let m = Matrix::new(1,1)
+            .fill_with(1)
+            .finalize();
+
+        assert_eq!(m.cols(), 1 as usize);
+        assert_eq!(m.rows(), 1 as usize);
+        assert_eq!(m[(0,0)], 1);
+        assert_eq!(m._data[0], 1);
     }
 
 }

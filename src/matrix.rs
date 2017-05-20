@@ -38,14 +38,6 @@ impl<T: Num + Copy> Matrix<T> {
         }
         self
     }
-
-    pub fn finalize(&mut self) -> Matrix<T> {
-        Matrix {
-            _cols: self.cols(),
-            _rows: self.rows(),
-            _data: self._data.clone()
-        }
-    }
 }
 
 impl<T : Num + Copy> Index<(usize,usize)> for Matrix<T> {
@@ -76,9 +68,7 @@ mod tests {
 
     #[test]
     fn zero_1x1() {
-        let mut m = Matrix::new(1,1)
-            .fill_with(0)
-            .finalize();
+        let mut m = Matrix::new(1,1).fill_with(0);
 
         assert_eq!(m.cols()  , 1 as usize);
         assert_eq!(m.rows()  , 1 as usize);
@@ -89,10 +79,9 @@ mod tests {
         assert_eq!(m._data[0], 1);
     }
 
+    #[test]
     fn one_1x1() {
-        let mut m = Matrix::new(1,1)
-            .fill_with(1)
-            .finalize();
+        let mut m = Matrix::new(1,1).fill_with(1);
 
         assert_eq!(m.cols()  , 1 as usize);
         assert_eq!(m.rows()  , 1 as usize);
@@ -103,4 +92,109 @@ mod tests {
         assert_eq!(m._data[0], 0);
     }
 
+    #[test]
+    fn identity_1x1() {
+        let mut m = Matrix::new(1,1).identity();
+
+        assert_eq!(m.cols()  , 1 as usize);
+        assert_eq!(m.rows()  , 1 as usize);
+        assert_eq!(m[(0,0)]  , 1);
+        assert_eq!(m._data[0], 1);
+        m[(0,0)] = 0;
+        assert_eq!(m[(0,0)]  , 0);
+        assert_eq!(m._data[0], 0);
+    }
+
+    #[test]
+    fn zero_2x2() {
+        let mut m = Matrix::new(2,2).fill_with(0);
+
+        assert_eq!(m.cols()  , 2 as usize);
+        assert_eq!(m.rows()  , 2 as usize);
+
+        assert_eq!(m[(0,0)]  , 0);
+        assert_eq!(m[(0,1)]  , 0);
+        assert_eq!(m[(1,0)]  , 0);
+        assert_eq!(m[(1,1)]  , 0);
+        assert_eq!(m._data[0], 0);
+        assert_eq!(m._data[1], 0);
+        assert_eq!(m._data[2], 0);
+        assert_eq!(m._data[3], 0);
+
+        m[(0,0)] = 1;
+        m[(0,1)] = 1;
+        m[(1,0)] = 1;
+        m[(1,1)] = 1;
+
+        assert_eq!(m[(0,0)]  , 1);
+        assert_eq!(m[(0,1)]  , 1);
+        assert_eq!(m[(1,0)]  , 1);
+        assert_eq!(m[(1,1)]  , 1);
+        assert_eq!(m._data[0], 1);
+        assert_eq!(m._data[1], 1);
+        assert_eq!(m._data[2], 1);
+        assert_eq!(m._data[3], 1);
+    }
+
+    #[test]
+    fn one_2x2() {
+        let mut m = Matrix::new(2,2).fill_with(1);
+
+        assert_eq!(m.cols()  , 2 as usize);
+        assert_eq!(m.rows()  , 2 as usize);
+
+        assert_eq!(m[(0,0)]  , 1);
+        assert_eq!(m[(0,1)]  , 1);
+        assert_eq!(m[(1,0)]  , 1);
+        assert_eq!(m[(1,1)]  , 1);
+        assert_eq!(m._data[0], 1);
+        assert_eq!(m._data[1], 1);
+        assert_eq!(m._data[2], 1);
+        assert_eq!(m._data[3], 1);
+
+        m[(0,0)] = 0;
+        m[(0,1)] = 0;
+        m[(1,0)] = 0;
+        m[(1,1)] = 0;
+
+        assert_eq!(m[(0,0)]  , 0);
+        assert_eq!(m[(0,1)]  , 0);
+        assert_eq!(m[(1,0)]  , 0);
+        assert_eq!(m[(1,1)]  , 0);
+        assert_eq!(m._data[0], 0);
+        assert_eq!(m._data[1], 0);
+        assert_eq!(m._data[2], 0);
+        assert_eq!(m._data[3], 0);
+    }
+
+    #[test]
+    fn identity_2x2() {
+        let mut m = Matrix::new(2,2).identity();
+
+        assert_eq!(m.cols()  , 2 as usize);
+        assert_eq!(m.rows()  , 2 as usize);
+
+        assert_eq!(m[(0,0)]  , 1);
+        assert_eq!(m[(0,1)]  , 0);
+        assert_eq!(m[(1,0)]  , 0);
+        assert_eq!(m[(1,1)]  , 1);
+        assert_eq!(m._data[0], 1);
+        assert_eq!(m._data[1], 0);
+        assert_eq!(m._data[2], 0);
+        assert_eq!(m._data[3], 1);
+
+        m[(0,0)] = 0;
+        m[(0,1)] = 1;
+        m[(1,0)] = 1;
+        m[(1,1)] = 0;
+
+        assert_eq!(m[(0,0)]  , 0);
+        assert_eq!(m[(0,1)]  , 1);
+        assert_eq!(m[(1,0)]  , 1);
+        assert_eq!(m[(1,1)]  , 0);
+        assert_eq!(m._data[0], 0);
+        assert_eq!(m._data[1], 1);
+        assert_eq!(m._data[2], 1);
+        assert_eq!(m._data[3], 0);
+    }
 }

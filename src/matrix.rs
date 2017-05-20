@@ -1,8 +1,6 @@
 use num_traits::Num;
 use std::ops::{Index,IndexMut};
 
-
-
 #[derive(Debug)]
 struct Matrix<T> {
   _cols: usize,
@@ -11,38 +9,32 @@ struct Matrix<T> {
 }
 
 impl<T: Num + Copy> Matrix<T> {
-    pub fn new(cols: usize, rows: usize) -> Matrix<T> {
-        Matrix {
-            _cols: cols,
-            _rows: rows,
-            _data: Vec::new(),
-        }
-    }
-
     pub fn cols(&self) -> usize { self._cols }
     pub fn rows(&self) -> usize { self._rows }
 
-    pub fn fill_with(cols: usize, rows: usize, v: T) -> Matrix<T> {
-        Matrix {
-            _cols: cols,
-            _rows: rows,
-            _data: vec![v; (cols * rows) as usize],
-        }
+    pub fn fill_with(&mut self, v: T) -> &mut Matrix<T> {
+        self._data = vec![v; (self.cols() * self.rows()) as usize];
+        self
     }
 
-    pub fn identity(dim: usize) -> Matrix<T> {
-        let mut m = Matrix {
-            _cols: dim,
-            _rows: dim,
-            _data: vec![T::zero(); (dim * dim) as usize],
-        };
-
-        let mut addr = 0;
-        for i in 0 .. dim {
-            addr = (i + i * dim) as usize;
-            m._data[addr] = T::one();
+    pub fn identity(&mut self) -> &mut Matrix<T> {
+        if self.is_square() == false {
+            panic!("Identity matrices must be square.");
         }
-        m
+
+        self.fill_with(T::zero());
+
+        for i in 0 .. self.cols() {
+            self[(i,i)] = T::one();
+        }
+        self
+    }
+}
+
+trait Square { fn is_square(&self) -> bool; }
+impl<T : Num + Copy> Square for Matrix<T> {
+    fn is_square(&self) -> bool {
+        self.cols() == self.rows()
     }
 }
 
@@ -61,13 +53,38 @@ impl<T : Num + Copy> IndexMut<(usize,usize)> for Matrix<T> {
     }
 }
 
-trait Square { fn is_square(&self) -> bool; }
-impl<T : Num + Copy> Square for Matrix<T> {
-    fn is_square(&self) -> bool {
-        self.cols() == self.rows()
+#[derive(Debug)]
+struct MatrixBuilder<T>(Matrix<T>);
+
+impl<T: Num + Copy> MatrixBuilder<T> {
+    pub fn new() -> Matrix<T> {
+        Matrix {
+            _cols: 0,
+            _rows: 0,
+            _data: Vec::new(),
+        }
+    }
+
+    pub fn set_cols(&mut self, cols: usize) -> &mut Matrix<T> {
+        self._cols = cols;
+        self
+    }
+
+    pub fn set_rows(&mut self, rows: usize) -> &mut Matrix<T> {
+        self._rows = rows;
+        self
+    }
+
+    pub fn finalize(self) -> Matrix<T> { // takeownership and destroy self
+        Matrix {
+            _cols: self.cols(),
+            _rows: self.rows(),
+            _data: self._data,
+        }
     }
 }
 
+/*
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -234,3 +251,4 @@ mod tests {
         assert_eq!(m.is_square(), false);
     }
 }
+*/

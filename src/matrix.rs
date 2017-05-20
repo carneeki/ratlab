@@ -30,11 +30,11 @@ impl<T: Num + Copy> Matrix<T> {
             panic!("Matrix is not square. Bye");
         }
 
-        self.fill_with(0);
+        self.fill_with(T::zero());
         let mut addr = 0;
         for i in 0..self.cols() {
             addr = (i + i*self.cols()) as usize;
-            self._data[addr] = 1;
+            self._data[addr] = T::one();
         }
         self
     }
@@ -52,14 +52,14 @@ impl<T : Num + Copy> Index<(usize,usize)> for Matrix<T> {
     type Output = T;
     fn index(&self, idx: (usize,usize)) -> &T {
         let addr = (idx.0 + idx.1*self.cols()) as usize;
-        self._data[addr]
+        &self._data[addr]
     }
 }
 
 impl<T : Num + Copy> IndexMut<(usize,usize)> for Matrix<T> {
     fn index_mut(&mut self, idx: (usize,usize)) -> &mut T {
         let addr = (idx.0 + idx.1*self.cols()) as usize;
-        self._data[addr]
+        &mut self._data[addr]
     }
 }
 

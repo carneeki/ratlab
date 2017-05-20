@@ -20,19 +20,19 @@ impl<T: Num + Copy> Matrix<T> {
     pub fn cols(&self) -> usize { self._cols }
     pub fn rows(&self) -> usize { self._rows }
 
-    pub fn fill_with(&mut self, v: T) -> &mut Matrix<T> {
+    pub fn fill_with(mut self, v: T) -> Matrix<T> {
         self._data = vec![v; (self.cols()*self.rows()) as usize];
         self
     }
 
-    pub fn identity(&mut self) -> &mut Matrix<T> {
+    pub fn identity(mut self) -> Matrix<T> {
         if self.rows() != self.cols() {
             panic!("Matrix is not square. Bye");
         }
 
         self.fill_with(T::zero());
         let mut addr = 0;
-        for i in 0..self.cols() {
+        for i in 0 .. self.cols() {
             addr = (i + i*self.cols()) as usize;
             self._data[addr] = T::one();
         }

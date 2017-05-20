@@ -59,8 +59,8 @@ struct MatrixBuilder<T>(Matrix<T>);
 impl<T: Num + Copy> MatrixBuilder<T> {
     pub fn new() -> Matrix<T> {
         Matrix {
-            _cols: 0,
-            _rows: 0,
+            _cols: 0 as usize,
+            _rows: 0 as usize,
             _data: Vec::new(),
         }
     }
@@ -76,6 +76,13 @@ impl<T: Num + Copy> MatrixBuilder<T> {
     }
 
     pub fn finalize(self) -> Matrix<T> { // takeownership and destroy self
+        if self._cols == num::zero() {
+            panic!("cols cannot be zero");
+        }
+        if self._rows == zero() {
+            panic!("rows cannot be zero");
+        }
+
         Matrix {
             _cols: self.cols(),
             _rows: self.rows(),

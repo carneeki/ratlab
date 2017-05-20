@@ -5,12 +5,12 @@ struct Matrix<T> {
   data: Vec<T>,
 }
 
-impl<T> Matrix<T> {
+impl<T: Num> Matrix<T> {
     pub fn new(cols: usize, rows: usize) -> Matrix<T> {
         Matrix {
             _cols: cols,
             _rows: rows,
-            _data: Vec::new(),
+            data: Vec::new(),
         }
     }
 

@@ -90,14 +90,17 @@ mod tests {
     }
 
     fn one_1x1() {
-        let m = Matrix::new(1,1)
+        let mut m = Matrix::new(1,1)
             .fill_with(1)
             .finalize();
 
-        assert_eq!(m.cols(), 1 as usize);
-        assert_eq!(m.rows(), 1 as usize);
-        assert_eq!(m[(0,0)], 1);
+        assert_eq!(m.cols()  , 1 as usize);
+        assert_eq!(m.rows()  , 1 as usize);
+        assert_eq!(m[(0,0)]  , 1);
         assert_eq!(m._data[0], 1);
+        m[(0,0)] = 0;
+        assert_eq!(m[(0,0)]  , 0);
+        assert_eq!(m._data[0], 0);
     }
 
 }

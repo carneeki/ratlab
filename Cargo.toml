@@ -4,4 +4,3 @@ version = "0.1.0"
 authors = ["Adam Carmichael <carneeki@carneeki.net>"]
 
 [dependencies]
-derive_builder = "0.4"

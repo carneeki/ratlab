@@ -1,6 +1,8 @@
 use num_traits::Num;
 use std::ops::{Index,IndexMut};
 
+
+
 #[derive(Debug)]
 struct Matrix<T> {
   _cols: usize,
@@ -29,17 +31,18 @@ impl<T: Num + Copy> Matrix<T> {
     }
 
     pub fn identity(dim: usize) -> Matrix<T> {
-        Matrix {
+        let mut m = Matrix {
             _cols: dim,
             _rows: dim,
-            _data: vec![0; (dim * dim) as usize],
+            _data: vec![T::zero(); (dim * dim) as usize],
         };
 
         let mut addr = 0;
         for i in 0 .. dim {
             addr = (i + i * dim) as usize;
-            self._data[addr] = T::one();
+            m._data[addr] = T::one();
         }
+        m
     }
 }
 
@@ -58,8 +61,8 @@ impl<T : Num + Copy> IndexMut<(usize,usize)> for Matrix<T> {
     }
 }
 
-trait Squareness { fn is_square(&self) -> bool; }
-impl<T : Num + Copy> Squareness for Matrix<T> {
+trait Square { fn is_square(&self) -> bool; }
+impl<T : Num + Copy> Square for Matrix<T> {
     fn is_square(&self) -> bool {
         self.cols() == self.rows()
     }
@@ -80,6 +83,8 @@ mod tests {
         m[(0,0)] = 1;
         assert_eq!(m[(0,0)]  , 1);
         assert_eq!(m._data[0], 1);
+
+        assert_eq!(m.is_square(), true);
     }
 
     #[test]
@@ -93,6 +98,8 @@ mod tests {
         m[(0,0)] = 0;
         assert_eq!(m[(0,0)]  , 0);
         assert_eq!(m._data[0], 0);
+
+        assert_eq!(m.is_square(), true);
     }
 
     #[test]
@@ -106,6 +113,8 @@ mod tests {
         m[(0,0)] = 0;
         assert_eq!(m[(0,0)]  , 0);
         assert_eq!(m._data[0], 0);
+
+        assert_eq!(m.is_square(), true);
     }
 
     #[test]
@@ -137,6 +146,8 @@ mod tests {
         assert_eq!(m._data[1], 1);
         assert_eq!(m._data[2], 1);
         assert_eq!(m._data[3], 1);
+
+        assert_eq!(m.is_square(), true);
     }
 
     #[test]
@@ -168,6 +179,8 @@ mod tests {
         assert_eq!(m._data[1], 0);
         assert_eq!(m._data[2], 0);
         assert_eq!(m._data[3], 0);
+
+        assert_eq!(m.is_square(), true);
     }
 
     #[test]
@@ -199,5 +212,25 @@ mod tests {
         assert_eq!(m._data[1], 1);
         assert_eq!(m._data[2], 1);
         assert_eq!(m._data[3], 0);
+
+        assert_eq!(m.is_square(), true);
+    }
+
+    #[test]
+    fn zero_1x2() {
+        let mut m = Matrix::fill_with(1, 2, 0);
+        assert_eq!(m.cols() , 1 as usize);
+        assert_eq!(m.rows() , 2 as usize);
+
+        assert_eq!(m[(0,0)] , 0);
+        assert_eq!(m[(0,1)] , 0);
+
+        m[(0,0)] = 1;
+        m[(0,1)] = 1;
+
+        assert_eq!(m[(0,0)] , 1);
+        assert_eq!(m[(0,1)] , 1);
+
+        assert_eq!(m.is_square(), false);
     }
 }
